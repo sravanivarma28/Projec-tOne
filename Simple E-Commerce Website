@@ -1,0 +1,71 @@
+import logo from './logo.svg';
+import './App.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button, Dialog, DialogContent } from '@mui/material';
+
+function App() {
+ const [products,setProducts]=useState([])
+ const [open,setOpen]=useState(false)
+const [prod,setProd]=useState({})
+
+  useEffect(()=>{
+axios.get('https://fakestoreapi.com/products').then(
+(result)=>{
+setProducts(result.data)
+}
+)
+  },[]
+  )
+  function openDiloag(prod){
+    setOpen(true)
+   setProd(prod)
+   }
+   function closeDiloag(prod){
+    setOpen(false)
+   }
+  return (
+    <div className="App">
+      <div className='row'>
+     {products.map(
+(prod)=>
+<div className='card' style={{width:'18rem'}}>
+ <div className='card-header'>
+<h6>{prod.title}</h6>
+ </div>
+ <div className='card-body'>
+  <img src={prod.image} className='card-img-top'/>
+ </div>
+ <div className='card-footer btn-group'>
+ <button className='btn btn-primary' onClick={()=>openDiloag(prod)}>View </button>
+ <button className='btn btn-success' onClick={()=>openDiloag(prod)}>Edit</button>
+ <button  className='btn btn-danger' onClick={()=>openDiloag(prod)}>Delete</button>
+ </div>
+  </div>
+     )
+     }
+</div>
+<Dialog open={open}>
+<DialogContent>
+<div className='card' style={{width:'18rem'}}>
+ <div className='card-header'>
+<h6>{prod.title}</h6>
+ </div>
+
+ <div className='card-body'>
+  <img src={prod.image} className='card-img-top'/>
+ </div>
+ <div className='card-footer btn-group'>
+ <button className='btn btn-primary' onClick={()=>openDiloag(prod)}>View </button>
+ <button className='btn btn-success' onClick={()=>openDiloag(prod)}>Edit</button>
+ <button  className='btn btn-danger' onClick={()=>openDiloag(prod)}>Delete</button>
+ </div>
+  </div>
+  <Button onClick={()=>closeDiloag()}>close</Button>
+</DialogContent>
+
+</Dialog>
+    </div>
+  );
+}
+export default App;
